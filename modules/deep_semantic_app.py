@@ -86,12 +86,12 @@ POS_DISPLAY = {
 }
 
 SPACY_TO_WORDNET_POS = {
-    "NOUN": wn.NOUN,
-    "PROPN": wn.NOUN,
-    "VERB": wn.VERB,
-    "AUX": wn.VERB,
-    "ADJ": wn.ADJ,
-    "ADV": wn.ADV,
+    "NOUN": "n",
+    "PROPN": "n",
+    "VERB": "v",
+    "AUX": "v",
+    "ADJ": "a",
+    "ADV": "r",
 }
 
 ONLINE_POS_MAP = {

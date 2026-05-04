@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Streamlit / local runtime
+.streamlit/secrets.toml
+
+# Logs
+logs/*.log
+logs/*.pid
+logs/*.python
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Model / cache artifacts
+*.pt
+*.bin
+*.safetensors
+*.ckpt
+
+# Local notebook checkpoints
+.ipynb_checkpoints/

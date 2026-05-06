@@ -172,6 +172,11 @@ def dependency_svg(doc: spacy.tokens.Doc) -> str | None:
     return displacy.render(doc, style="dep", options=options, jupyter=False)
 
 
+def has_dependency_labels(doc: spacy.tokens.Doc) -> bool:
+    """Return True only when the current doc really contains dependency labels."""
+    return any(bool(token.dep_) for token in doc)
+
+
 def manual_dependency_svg(words: list[dict[str, str]], arcs: list[dict[str, str | int]]) -> str:
     """使用 displaCy 的 manual 模式绘制规则依存图，作为中文模型缺失时的兜底。"""
     options = {
@@ -471,6 +476,8 @@ def render_attachment_hint(doc: spacy.tokens.Doc, text: str, extra: list[dict[st
 
 def attachment_observation(doc: spacy.tokens.Doc, text: str) -> list[dict[str, str]]:
     """根据模型输出自动生成两个侦探任务的观察记录。"""
+    if not has_dependency_labels(doc):
+        return []
     observations = []
     lower_text = text.lower()
 
@@ -548,7 +555,8 @@ def render_syntax_app() -> None:
         if chinese_fallback:
             st.caption(chinese_fallback.status)
 
-        render_attachment_hint(doc, sentence, chinese_fallback.observations if chinese_fallback else None)
+        if chinese_fallback or resource.has_dependency_parser:
+            render_attachment_hint(doc, sentence, chinese_fallback.observations if chinese_fallback else None)
 
         feature_df = chinese_fallback.features if chinese_fallback else token_feature_table(doc)
         core_df = chinese_fallback.core_args if chinese_fallback else core_argument_table(doc)
@@ -558,7 +566,9 @@ def render_syntax_app() -> None:
             st.dataframe(feature_df, use_container_width=True, hide_index=True)
         with core_col:
             st.markdown("### 核心论元提取器")
-            if core_df.empty:
+            if core_df.empty and not resource.has_dependency_parser and not chinese_fallback:
+                st.warning("当前处于 spaCy blank 降级模式，只能分词，不能产生真实依存标签，因此无法抽取 nsubj / obj / pobj / ROOT。请在部署环境中安装 en_core_web_sm / zh_core_web_sm。")
+            elif core_df.empty:
                 st.warning("没有抽取到 nsubj / dobj / obj / pobj / ROOT。")
             else:
                 st.dataframe(core_df, use_container_width=True, hide_index=True)

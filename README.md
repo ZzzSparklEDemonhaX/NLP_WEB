@@ -329,10 +329,7 @@ git push -u origin main
 - 某些高级任务仍属于近似实现，而非完整工业级系统
 - 中英文模型资源在不同环境下可能存在兼容性差异
 
-## 15. Author
 
-- GitHub: [dimenghan2tech](https://github.com/dimenghan2tech)
-
-## 16. License
+## 15. License
 
 本项目主要用于课程学习、实验展示与个人项目演示。
